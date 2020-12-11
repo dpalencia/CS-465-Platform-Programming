@@ -31,6 +31,8 @@ public class NodeData : MonoBehaviour {
     public void copyNodeData(NodeData newNodeData) {
         startColor = newNodeData.startColor;
         endColor = newNodeData.endColor;
+        startColor.a = 1;
+        endColor.a = 1;
         startPosition.y = newNodeData.startPosition.y;
         nextPosition.y = newNodeData.nextPosition.y;
         nodeDataChanged();

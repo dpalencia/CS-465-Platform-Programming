@@ -36,7 +36,7 @@ public class UIManager : PlatformGenericSingleton<UIManager> {
     public static event ClearSelection clearSelection;
 
     public delegate void ResetNodes();
-    public static event ClearSelection resetNodes;
+    public static event ResetNodes resetNodes;
 
     public delegate void SetNodesToTargets();
     public static event SetNodesToTargets setNodesToTargets;
@@ -53,6 +53,7 @@ public class UIManager : PlatformGenericSingleton<UIManager> {
     public Text statsDeltaSpacing;
     public Text statsPlatformSize;
     public Text statsMaximumHeight;
+    public Text simSpeedNumText;
     public static CurrentScene currentScene = CurrentScene.MAIN;
 
     public GameObject canvasPlatform;
@@ -63,8 +64,19 @@ public class UIManager : PlatformGenericSingleton<UIManager> {
     public Text selectedNodeText;
     public  Text selectedNodeHeight;
 
+    public Image startColorImage;
+    public Image endColorImage;
+
+    public InputField startR;
+    public InputField startG;
+    public InputField startB;
+    public InputField endR;
+    public InputField endG;
+    public InputField endB;
     public NodeData uiNodeData;
     
+
+
     void OnEnable() {
         setComponents();
     }
@@ -89,17 +101,43 @@ public class UIManager : PlatformGenericSingleton<UIManager> {
     void setNodeUI() {
         if(NodeManager.selectedNodeManager != null) {
         NodeData currentNodeData = NodeManager.selectedNodeManager.nodeData;
-            /*
             if(ySlider != null) {
                 ySlider.value = NodeManager.selectedNodeManager.nodeData.nextPosition.y;
             }
-            */
+            
             if(selectedNodeHeight != null) {
                 selectedNodeHeight.text = currentNodeData.nextPosition.y.ToString();
             }
 
             if(selectedNodeText != null) {
                 selectedNodeText.text = string.Format("[{0}, {1}]", currentNodeData.platformIndexM, currentNodeData.platformIndexN);
+            }
+            
+            if(startColorImage != null) {
+                startColorImage.color = currentNodeData.startColor;
+            }
+
+            if(endColorImage != null) {
+                endColorImage.color = currentNodeData.endColor;
+            }
+
+            if (startR != null) {
+                startR.text = currentNodeData.startColor.r.ToString();
+            }
+            if (startG != null) {
+                startG.text = currentNodeData.startColor.g.ToString();
+            }
+            if (startB != null) {
+                startB.text = currentNodeData.startColor.b.ToString();
+            }
+            if (endR != null) {
+                endR.text = currentNodeData.endColor.r.ToString();
+            }
+            if (endG != null) {
+                endG.text = currentNodeData.endColor.g.ToString();
+            }
+            if (endB != null) {
+                endB.text = currentNodeData.endColor.b.ToString();
             }
         }
     }
@@ -117,6 +155,9 @@ public class UIManager : PlatformGenericSingleton<UIManager> {
         }
         if (selectedNodeHeightSlider != null) {
             selectedNodeHeightSlider.maxValue = platformManager.getMaxHeight();
+        }
+        if (simSpeedNumText != null) {
+            simSpeedNumText.text = NodeManager.interpSpeed.ToString();
         }
     }
 
@@ -137,10 +178,22 @@ public class UIManager : PlatformGenericSingleton<UIManager> {
         
         selectedNodeText = GameObject.Find("SelectedNodeText").GetComponent<Text>();
         selectedNodeHeight = GameObject.Find("NodeHeightText").GetComponent<Text>();
+        simSpeedNumText = GameObject.Find("SimSpeedNum").GetComponent<Text>();
 
         ySlider = GameObject.Find("NodeHeightSlider").GetComponent<Slider>();
         maximumHeightSlider = GameObject.Find("MaximumHeight").GetComponent<Slider>();
         selectedNodeHeightSlider = GameObject.Find("NodeHeightSlider").GetComponent<Slider>();
+
+        startColorImage = GameObject.Find("StartColorImage").GetComponent<Image>();
+        endColorImage = GameObject.Find("EndColorImage").GetComponent<Image>();
+
+        startR = GameObject.Find("NodeStartColorR").GetComponent<InputField>();
+        startG = GameObject.Find("NodeStartColorG").GetComponent<InputField>();
+        startB = GameObject.Find("NodeStartColorB").GetComponent<InputField>();
+        endR = GameObject.Find("NodeEndColorR").GetComponent<InputField>();
+        endG = GameObject.Find("NodeEndColorG").GetComponent<InputField>();
+        endB = GameObject.Find("NodeEndColorB").GetComponent<InputField>();
+
     }
 
     public void onSliderChanged(Slider slider) {
@@ -155,6 +208,11 @@ public class UIManager : PlatformGenericSingleton<UIManager> {
             case "NodeHeightSlider":
                 NodeManager.selectedNodeManager.setNodeDataHeight(slider.value);
                 uiNodeData.setNodeHeight(slider.value);
+                break;
+            case "SimSpeedSlider":
+                NodeManager.setInterpSpeed(slider.value);
+                setPlatformUI();
+                
                 break;
         }
     }
@@ -200,7 +258,7 @@ public class UIManager : PlatformGenericSingleton<UIManager> {
             case "NodeEndColorG":
                 if(float.TryParse(inputField.text, out newColorVal) == true) {
                     NodeManager.selectedNodeManager.setEndColorG(newColorVal);
-                    uiNodeData.setEndColorR(newColorVal);
+                    uiNodeData.setEndColorG(newColorVal);
                 }
                 break;
             case "NodeEndColorB":

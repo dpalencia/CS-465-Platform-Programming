@@ -168,14 +168,14 @@ public class PlatformManager : PlatformGenericSingleton<PlatformManager>
     string inputPath = "PlatformDataInput.json";
     System.IO.StreamReader file = new System.IO.StreamReader(inputPath);
 
-    // Set platform config from jsin
+    // Set platform config from json
     string platformConfigJSON = file.ReadLine();
     platformConfig.buildFromJSON(platformConfigJSON);
 
     // Begin to read the rest of the file line by line
     string line;
     nodeJsonList.Clear();
-    // Ride the input file line by line,
+    // Read the input file line by line,
     // add the line to a list
     while((line = file.ReadLine()) != null) {
       nodeJsonList.Add(line);

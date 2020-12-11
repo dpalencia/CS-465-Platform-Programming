@@ -31,7 +31,7 @@ public class NodeManager : MonoBehaviour {
     public Color currentColor;
     public Color nextColor; 
 
-    public float interpSpeed = .5f;
+    public static float interpSpeed = .5f;
 
     // The current node's renderer object,
     // used to update its color and texture
@@ -62,7 +62,9 @@ public class NodeManager : MonoBehaviour {
     // in the simulation.
     public int simIndex; 
 
-
+    public static void setInterpSpeed(float newSpeed) {
+        interpSpeed = newSpeed;
+    }
     public static void toggleRun() {
         run = !run;
     }
@@ -140,7 +142,6 @@ public class NodeManager : MonoBehaviour {
         nextPosition.y = newNodeData.nextPosition.y;
         nodeData.copyNodeData(newNodeData);
     }
-
 
     void Start()
     {

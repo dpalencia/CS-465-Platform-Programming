@@ -75,8 +75,9 @@ public class PlatformCameraControl : PlatformGenericSingleton<PlatformCameraCont
     private void camToNode() {
         t = 0;
         oldTarget = targetPosition;
-        if(NodeManager.selectedNodeManager.nodeData != null)
+        if (NodeManager.selectedNodeManager != null) {
             newTarget = NodeManager.selectedNodeManager.nodeData.startPosition;
+        }
         oldPosition = transform.position;
         newPosition = transform.position;
     }
@@ -93,18 +94,6 @@ public class PlatformCameraControl : PlatformGenericSingleton<PlatformCameraCont
             targetPosition = Vector3.Lerp(oldTarget, newTarget, t);
             t += Time.deltaTime * 1.5f;
         } 
-
-
-        #region ROTATE VERTICAL/HORIZONTAL
-        if (Input.GetKey(KeyCode.RightArrow))
-            transform.RotateAround(targetPosition, -Vector3.up, Time.deltaTime * rotateSpeed);
-        if (Input.GetKey(KeyCode.LeftArrow))
-            transform.RotateAround(targetPosition, Vector3.up, Time.deltaTime * rotateSpeed);
-        if (Input.GetKey(KeyCode.UpArrow))
-            transform.RotateAround(targetPosition, Vector3.right, Time.deltaTime * rotateSpeed);
-        if (Input.GetKey(KeyCode.DownArrow))
-            transform.RotateAround(targetPosition, -Vector3.right, Time.deltaTime * rotateSpeed);
-        #endregion
 
         // Forward/backward/up/down
 
